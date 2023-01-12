@@ -1,0 +1,7 @@
+{
+  "name": "ksu_project",
+  "version": "1.0.0",
+  "dependencies": {
+    "swiper": "^8.2.4"
+  }
+}

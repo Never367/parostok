@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Особисті дані{% endblock %}
+
+{% block content %}
+    <div class="container mt-10 mb-3 flex-grow-1">
+        {% if user_form.errors or profile_form.errors %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+        <div class="row">
+            {% include 'account/user_account.html' %}
+            <div class="col-lg-10">
+                <h1>Особисті дані</h1>
+                <p>Ви можете додати або змінити свої особисті дані за допомогою наступної форми:</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="col-12 col-lg-6">
+                        {% for field in user_form %}
+                            <div class="form-outline mb-4">
+                                {{ field }}
+                                <label class="form-label">{{ field.label }}</label>
+                            </div>
+                        {% endfor %}
+                        {% for field in profile_form %}
+                            <div class="form-outline mb-4">
+                                {{ field }}
+                                <label class="form-label">{{ field.label }}</label>
+                            </div>
+                        {% endfor %}
+                        <input class="mt-3 btn btn-success btn-block d-flex justify-content-center"
+                                   type="submit" value="Зберегти">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

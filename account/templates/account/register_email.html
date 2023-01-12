@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+    <table width="800" cellspacing="0" cellpadding="0" border="0" align="center"
+           style="font:14px Arial,Helvetica,sans-serif">
+        <tbody>
+            <tr>
+                <td width="100%" style="height: 92px; border-bottom: 3px solid #737373">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                            <tr>
+                                <td style="font-size: 20px;font-weight: bold;padding-top: 6px;">
+                                    <a style="color: #000;text-decoration: none" href="#">Par.ost.ok</a>
+                                </td>
+                                <td style="color: #000;font-size: 16px;font-weight: bold;padding-top: 6px;text-align: right">
+                                    <div style="padding-left: 18px;float: right;">
+                                        <a style="color: #000;text-decoration: none" href="tel:+380989192030">
+                                            +38 098 919 20 30
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>{% if user.first_name %}{{ user.first_name }} ви
+                    {% else %}Ви{% endif %} успішно зареєструвались на сайті
+                        <a style="color: #000;text-decoration: none" href="{{ protocol }}://{{ domain }}">
+                            Par.ost.ok
+                        </a>
+                    </h3>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 22px 0;color: #000;font-size: 16px;line-height: 1.5">
+                    <div style="padding-bottom: 25px">
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" style="font-size: 16px">
+                            <tbody>
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Ел. пошта
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        {{ user.username }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Посилання для підтвердження ел. пошти
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        <a href="{{ protocol }}://{{ domain }}{% url "register_confirm" uidb64=uid token=token %}">
+                                            Посилання
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 23px 0 21px;border-top: 1px solid #a5a5a5;">
+                    <table width="100%" style="font: 12px Arial,Helvetica,sans-serif;color: #8d8d8d">
+                        <tbody>
+                            <tr>
+                                <td style="font-size: 14px">
+                                    <div>Par.ost.ok</div>
+                                    <div>+38 098 919 20 30</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

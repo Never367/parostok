@@ -1,0 +1,19 @@
+{% if request.user.is_authenticated %}
+    {% if product in request.user.wish_list.product.all %}
+        <div class="btn-outline-success p-0" id="search_icon">
+            <a href="{% url 'wish_list_remove' product.id %}">
+                <span class="green"><i class="fas fa-heart"></i> Видалити товар зі списку бажань</span>
+            </a>
+        </div>
+    {% else %}
+        <div class="btn-outline-success p-0" id="search_icon">
+            <a href="{% url 'wish_list_add' product.id %}">
+                <span class="green"><i class="fas fa-heart"></i> Додати товар до списку бажань</span>
+            </a>
+        </div>
+    {% endif %}
+{% else %}
+    <span class="text-black-50" data-tooltip="Увійдіть на сайт щоб додати товар в список бажань">
+        <i class="far fa-heart"></i> Додати товар до списку бажань
+    </span>
+{% endif %}

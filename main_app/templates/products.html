@@ -1,0 +1,61 @@
+<div class="col-lg-10">
+    <div class="row">
+        {% for product in page_obj %}
+        <div class="col-lg-4 col-xxl-3 mb-4">
+          <div class="card h-100">
+            <a href="{{ product.get_absolute_url }}">
+                {% if product.status_product == '_actual' or product.status_product == '_pre_order' %}
+                    <img class="card-img-top" src="/media/{{ product.images.first }}" alt="{{ product.name }}">
+                {% else %}
+                    <img class="card-img-top black-white"
+                         src="/media/{{ product.images.first }}"
+                         alt="{{ product.name }}">
+                {% endif %}
+            </a>
+            <div class="d-flex flex-column card-body text-center">
+              <div class="flex-grow-1">
+                <h5 class="card-title">
+                  <a href="{{ product.get_absolute_url }}" title="{{ product.name }}">
+                    {{ product.name|truncatechars:35 }}
+                  </a>
+                </h5>
+              </div>
+              <h6>{{ product.prices.all|first }} грн</h6>
+              {% if product.status_product == '_actual' %}
+                <a href="{{ product.get_absolute_url }}">
+                    <button class="btn btn-success rounded-7">Додати до кошику</button>
+                </a>
+                {% elif product.status_product == '_pre_order' %}
+                  <a href="{{ product.get_absolute_url }}">
+                    <button class="btn btn-success rounded-7">Попереднє замовлення</button>
+                  </a>
+                {% else %}
+                  {% if request.user.is_authenticated %}
+                      {% if product in request.user.wish_list.product.all %}
+                        <a href="{% url 'wish_list_remove' product.id %}">
+                            <button class="btn black-white rounded-7">
+                                Видалити товар зі списку бажань
+                            </button>
+                        </a>
+                      {% else %}
+                      <a href="{% url 'wish_list_add' product.id %}">
+                        <button  class="btn black-white rounded-7">
+                            Повідомити, коли з'явиться
+                        </button>
+                      </a>
+                      {% endif %}
+                  {% else %}
+                    <div data-tooltip="Увійдіть на сайт щоб додати товар в список бажань">
+                        <button class="btn black-white disabled">
+                            Повідомити, коли з'явиться
+                        </button>
+                    </div>
+                  {% endif %}
+                {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+{% include 'pagination.html' %}
+</div>

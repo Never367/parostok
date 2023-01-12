@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Оформлення замовлення{% endblock %}
+
+{% block content %}
+    <div class="container mt-10 mb-3 flex-grow-1">
+        {% if cart %}
+        <h1>Оформлення замовлення</h1>
+        <div class="row mt-3">
+            <div class="col-lg-7">
+                <form action="." method="post">
+                    {% csrf_token %}
+                    <div class="form-outline">
+                      <input type="text" id="first_name" class="form-control" name="first_name" required
+                             {% if request.user.is_authenticated %} value="{{ request.user.first_name }}" {% endif %}
+                      />
+                      <label class="form-label" for="first_name">Ім'я</label>
+                    </div>
+                    <div class="form-outline mt-3">
+                      <input type="text" id="last_name" class="form-control" name="last_name" required
+                             {% if request.user.is_authenticated %} value="{{ request.user.last_name }}" {% endif %}
+                      />
+                      <label class="form-label" for="last_name">Прізвище</label>
+                    </div>
+                    <div class="form-outline mt-3">
+                      <input type="tel" id="phone_number" class="form-control" pattern="\+38\d{10}"
+                             placeholder="+380501111111" name="phone_number" required
+                             {% if request.user.is_authenticated %} value="{{ request.user.profile.phone_number }}"
+                             {% else %} value="+380" {% endif %}
+                      />
+                      <label class="form-label" for="phone_number">Номер телефону</label>
+                    </div>
+                    <div class="form-outline mt-3">
+                      <input type="email" id="email" class="form-control" name="email" required
+                             {% if request.user.is_authenticated %}
+                             value="{{ request.user.email }}"
+                             {% endif %}
+                      />
+                      <label class="form-label" for="email">Эл. пошта</label>
+                    </div>
+                    <div class="form-outline mt-3">
+                      <input type="text" id="city" class="form-control" name="city" required
+                             {% if request.user.is_authenticated %} value="{{ request.user.profile.city }}" {% endif %}
+                      />
+                      <label class="form-label" for="city">Місто</label>
+                    </div>
+                    <div class="form-outline mt-3">
+                      <input type="text" id="address" class="form-control" name="address" required
+                             {% if request.user.is_authenticated %}
+                             value="{{ request.user.profile.address }}"
+                             {% endif %}
+                      />
+                      <label class="form-label" for="address">Адреса</label>
+                    </div>
+                    <div class="form-outline mt-3">
+                      <input type="text" id="postal_code" class="form-control" name="postal_code" required
+                             {% if request.user.is_authenticated %}
+                             value="{{ request.user.profile.postal_code }}"
+                             {% endif %}
+                      />
+                      <label class="form-label" for="postal_code">Поштовий індекс</label>
+                    </div>
+                    <select class="form-select mt-3" name="delivery_type" required>
+                        <option value="" disabled selected>Виберіть тип доставки</option>
+                        <option value="pick_up">Самовивіз</option>
+                        <option value="delivery_nova_p">Новою поштою</option>
+                        <option value="delivery_ukr_p">Укрпоштою</option>
+                    </select>
+                    <select class="form-select mt-3" name="payment_type" required>
+                        <option value="" disabled selected>Виберіть тип оплати</option>
+                        <option value="cash">Накладеним платежем</option>
+                        <option value="card">Оплата на карту</option>
+                    </select>
+                    <div class="form-outline mt-3">
+                      <textarea type="text" id="comment" name="comment" class="form-control"></textarea>
+                      <label class="form-label" for="comment">Коментар до замовлення</label>
+                    </div>
+                    <input class="mt-3 btn btn-success btn-block" type="submit" value="Зробити замовлення">
+                </form>
+            </div>
+            <div class="col-md-6 col-lg-5 col-xl-4 mt-3 mt-lg-0">
+              <div class="border px-3">
+                <div class="border-bottom">
+                  <p class="text-uppercase mb-0 py-3"><strong>Ваше замовлення</strong></p>
+                </div>
+                <div class="pt-3">
+                    <div class="border-bottom">
+                      <ul>
+                        {% for item in cart %}
+                            <li>
+                                {{ item.quantity }} шт {{ item.product }}
+                                {{ item.product_age.get_product_age_display }}
+                                {{ item.product_container.get_product_container_display }}
+                                <span>{{ item.total_price }} грн</span>
+                            </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                      <div class="d-flex justify-content-between pt-3">
+                           <p class="text-uppercase"><strong>Всього</strong></p>
+                           <p class="font-weight-bold">{{ cart.get_total_price }} грн</p>
+                      </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        {% else %}
+            <h3 class="text-center">Нажаль Ваш кошик порожній. Зробіть будь-ласка замовлення</h3>
+        {% endif %}
+    </div>
+
+{% endblock %}

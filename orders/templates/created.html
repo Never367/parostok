@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Дякуємо за замовлення{% endblock %}
+
+{% block content %}
+    <div class="container mt-10 mb-3 justify-content-center">
+        <div>
+            <h1>Дякуємо</h1>
+            <p>Ваше замовлення успішно оформлене. Номер Вашого замовлення
+                <strong>{{ order.id }}</strong>.
+            </p>
+            <p>З повагою, інтернет магазин "Par.ost.ok"</p>
+        </div>
+        <div class="mt-5">
+            {% if order.payment_type == 'card' %}
+            <p>Карта приватбанк ******** на ім'я Гаїна О.С. (ФОП)</p>
+            <p>Сума до сплати: {{ order.get_total_cost }} грн</p>
+            <p>Призначення платежу: № замовлення</p>
+            <p>Рахунок дійсний протягом одного дня</p>
+            <br>
+            {% endif %}
+            <p><span class="me-3 text-black-50">Ім'я</span> {{ order.first_name }}</p>
+            <p><span class="me-3 text-black-50">Прізвище</span> {{ order.last_name }}</p>
+            <p><span class="me-3 text-black-50">Номер телефону</span> {{ order.phone_number }}</p>
+            <p><span class="me-3 text-black-50">Эл. пошта</span> {{ order.email }}</p>
+            <p><span class="me-3 text-black-50">Місто</span> {{ order.city }}</p>
+            <p><span class="me-3 text-black-50">Адреса</span> {{ order.address }}</p>
+            <p><span class="me-3 text-black-50">Поштовий індекс</span> {{ order.postal_code }}</p>
+            <p><span class="me-3 text-black-50">Тип доставки</span> {{ order.get_delivery_type_display }}</p>
+            <p><span class="me-3 text-black-50">Тип оплати</span> {{ order.get_payment_type_display }}</p>
+            {% if order.comment %}
+                <p>Коментар {{ order.comment }}</p>
+            {% endif %}
+            <div class="mt-3">
+                <h5><strong>Замовлення</strong></h5>
+                {% for item in order.items.all %}
+                <div class="row pt-2">
+                    <div class="col-lg-2">
+                        <a href="{{ item.product.get_absolute_url }}">
+                            <img width="110" height="110" src="/media/{{ item.product.images.first }}"
+                                 alt="{{ item.product }}">
+                        </a>
+                    </div>
+                    <div class="col-lg-6">
+                        <a class="created" href="{{ item.product.get_absolute_url }}">
+                            {{ item.product }}<br>
+                            <small>{{ item.product_age }}
+                            {{ item.product_container }}</small>
+                            <br>
+                            <small>{{ item.price }} грн</small>
+                        </a>
+                    </div>
+                    <div class="col-6 col-lg-2">
+                        <br class="d-lg-none">
+                        Кількість
+                        <br>
+                        {{ item.quantity }} шт
+                    </div>
+                    <div class="col-6 col-lg-2">
+                        <br class="d-lg-none">
+                        Сума
+                        <br>
+                        {{ item.get_cost }} грн
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="text-end">
+                    Доставка по Україні <strong>за тарифами перевізника</strong>
+                </div>
+                <div class="text-end">
+                    <span>Всього</span>
+                    <span>{{ order.get_total_cost }} грн</span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

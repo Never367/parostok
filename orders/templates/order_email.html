@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+    <table width="800" cellspacing="0" cellpadding="0" border="0" align="center"
+           style="font:14px Arial,Helvetica,sans-serif">
+        <tbody>
+            <tr>
+                <td width="100%" style="height: 92px; border-bottom: 3px solid #737373">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                            <tr>
+                                <td style="font-size: 20px;font-weight: bold;padding-top: 6px;">
+                                    <a style="color: #000;text-decoration: none" href="#">Par.ost.ok</a>
+                                </td>
+                                <td style="color: #000;font-size: 16px;font-weight: bold;padding-top: 6px;text-align: right">
+                                    <div style="padding-left: 18px;float: right;">
+                                        <a style="color: #000;text-decoration: none" href="tel:+380989192030">
+                                            +38 098 919 20 30
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 22px 0;color: #000;font-size: 16px;line-height: 1.5">
+                    <div style="margin-bottom: 9px;font-size: 20px;font-weight: bold;color: #231f20">
+                        Номер замовлення {{ order_id }}
+                    </div>
+                    {% if order.payment_type == 'card' %}
+                    <p>Карта приватбанк ******** на ім'я Гаїна О.С. (ФОП)</p>
+                    <p>Сума до сплати: {{ order.get_total_cost }} грн</p>
+                    <p>Призначення платежу: № замовлення</p>
+                    <p>Рахунок дійсний протягом одного дня</p>
+                    <br>
+                    {% endif %}
+                    <p>З повагою, інтернет магазин "Par.ost.ok"</p>
+                    <div style="padding-bottom: 25px">
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" style="font-size: 16px">
+                            <tbody>
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Ім'я
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        {{ order.first_name }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Прізвище
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        {{ order.last_name }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Номер телефону
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        {{ order.phone_number }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Ел. пошта
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        {{ order.email }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Місто
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        {{ order.city }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Адреса
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        {{ order.address }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Поштовий індекс
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        {{ order.postal_code }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Тип доставки
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        {{ order.get_delivery_type_display }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Тип оплати
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        {{ order.get_payment_type_display }}
+                                    </td>
+                                </tr>
+                                {% if order.comment %}
+                                <tr>
+                                    <td width="160" style="padding: 6px 30px 6px 0;color: #8d8d8d; vertical-align: top">
+                                        Коментар
+                                    </td>
+                                    <td style="padding: 6px 0 6px 0">
+                                        {{ order.comment }}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="padding-bottom: 11px;font-weight: bold;font-size: 20px;color: #000">
+                        Замовлення
+                    </div>
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                           style="font-size: 14px;border-top: 1px solid #ededed;color: #000">
+                        <tbody>
+                            {% for item in order.items.all %}
+                            <tr style="border-bottom: 1px solid #ededed">
+                                <td width="110" height="110" style="border-bottom: 1px solid #ededed;text-align: center">
+                                    <a href="{{ item.product.get_absolute_url }}">
+                                        <img width="110" height="110" src="/media/{{ item.product.images.first }}"
+                                             alt="{{ item.product }}">
+                                    </a>
+                                </td>
+                                <td width="320" style="border-bottom: 1px solid #ededed; padding: 15px">
+                                    <div style="margin-bottom: 10px;font-size: 16px">
+                                        <a style="text-decoration: none; color: black" href="{{ item.product.get_absolute_url }}">
+                                            {{ item.product }}<br>
+                                            <small>{{ item.product_age }}
+                                            {{ item.product_container }}</small>
+                                            <br>
+                                            <small>{{ item.price }} грн</small>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td style="border-bottom: 1px solid #ededed">
+                                    <div>
+                                        <p>Кількість</p>
+                                        <p>{{ item.quantity }} шт</p>
+                                    </div>
+                                </td>
+                                <td style="border-bottom: 1px solid #ededed">
+                                    <div style="text-align: right">
+                                        <p>Сума</p>
+                                        <p>{{ item.get_cost }} грн</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="4"
+                                    style="text-align: right; border-bottom: 1px solid #ededed;padding: 15px;font-size: 16px">
+                                    <div>Доставка по Україні за тарифами перевізника</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="padding: 15px 0;text-align: right">
+                                    <span style="padding-right: 15px">Всього</span>
+                                    <span style="font-size: 24px;font-weight: bold">
+                                        {{ order.get_total_cost }} грн
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 23px 0 21px;border-top: 1px solid #a5a5a5;">
+                    <table width="100%" style="font: 12px Arial,Helvetica,sans-serif;color: #8d8d8d">
+                        <tbody>
+                            <tr>
+                                <td style="font-size: 14px">
+                                    <div>Par.ost.ok</div>
+                                    <div>+38 098 919 20 30</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

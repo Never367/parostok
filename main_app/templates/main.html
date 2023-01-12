@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}Par.ost.ok{% endblock %}
+
+{% block content %}
+
+    <div class="{% if form.errors %}mt-4 {% else %}mt-7 {% endif %}mb-5 flex-grow-1">
+        <!-- Carousel wrapper -->
+        <div class="d-none d-lg-flex justify-content-center">
+                <div class="w-100 shadow-0">
+                    <div class="swiper swiper_main mySwiper">
+                        <div class="swiper-wrapper">
+                        {% for banner in banners %}
+                            <div class="swiper-slide">
+                                <a href="{{ banner.link }}">
+                                    <div class="swiper-zoom-container">
+                                        <img src="{{ banner.image.url }}" alt="{{ banner }}">
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex d-lg-none justify-content-center">
+                <div class="w-100 shadow-0">
+                    <div class="swiper swiper_main mySwiper">
+                        <div class="swiper-wrapper">
+                        {% for banner in banners %}
+                            <div class="swiper-slide">
+                                <a href="{{ banner.link }}">
+                                    <div class="swiper-zoom-container">
+                                        <img src="{{ banner.image_mobile.url }}" alt="{{ banner }}">
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        <!-- Carousel wrapper end -->
+        <div class="container pt-10">
+            <!-- Category -->
+            <div class="text-center main-category position-relative">
+                <span class="fs-3 position-relative bg-white px-5">Категорії</span>
+            </div>
+            <div class="row mt-3">
+                {% for category in categories_dict %}
+                    <div class="col-6 col-lg-3 mb-4">
+                        <a href="{{ category.get_absolute_url }}">
+                            <div class="card h-100">
+                                <img class="card-img-top h-100" src="{{ category.image.url }}"
+                                     alt="{{ category.image }}">
+                                <div class="d-flex flex-column card-body text-center">
+                                    <div class="flex-grow-1">
+                                        <h5 class="card-title">
+                                            {{ category }}
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- Products -->
+            <div class="text-center main-category position-relative mt-3">
+                <span class="fs-3 position-relative bg-white px-5">Товари</span>
+            </div>
+            <div class="d-none d-lg-block swiper swiper_main_product mySwiper mt-3">
+                <div class="swiper-wrapper">
+                    {% for product in products %}
+                        <div id="slide" class="swiper-slide">
+                            <div class="card h-100">
+                                <a href="{{ product.get_absolute_url }}">
+                                    <img class="card-img-top" src="/media/{{ product.images.first }}"
+                                         alt="{{ product.images.first }}">
+                                </a>
+                                <div class="d-flex flex-column card-body text-center">
+                                  <div class="flex-grow-1">
+                                    <h5 class="card-title">
+                                      <a href="{{ product.get_absolute_url }}" title="{{ product.name }}">
+                                        {{ product.name|truncatechars:35 }}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div>
+                                      <h5>{{ product.prices.all|first }} грн</h5>
+                                      {% if product.status_product == '_actual' %}
+                                          <a href="{{ product.get_absolute_url }}">
+                                              <button class="btn btn-success rounded-7">Додати до кошику</button>
+                                          </a>
+                                      {% elif product.status_product == '_pre_order' %}
+                                          <a href="{{ product.get_absolute_url }}">
+                                              <button class="btn btn-success rounded-7">Попереднє замовлення</button>
+                                          </a>
+                                      {% endif %}
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-button-slick-next"></div>
+                <div class="swiper-button-slick-prev"></div>
+            </div>
+            <div class="d-block d-lg-none swiper swiper_main_product_mobile mySwiper mt-3">
+                <div class="swiper-wrapper">
+                    {% for product in products %}
+                        <div id="slide" class="swiper-slide card">
+                            <div class="card h-100">
+                                <a href="{{ product.get_absolute_url }}">
+                                    <img class="card-img-top" src="/media/{{ product.images.first }}"
+                                         alt="{{ product.images.first }}">
+                                </a>
+                                <div class="d-flex flex-column card-body text-center">
+                                  <div class="flex-grow-1">
+                                    <h5 class="card-title">
+                                      <a href="{{ product.get_absolute_url }}" title="{{ product.name }}">
+                                        {{ product.name|truncatechars:35 }}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div class="">
+                                      <h6>{{ product.prices.all|first }} грн</h6>
+                                      {% if product.status_product == '_actual' %}
+                                          <a href="{{ product.get_absolute_url }}">
+                                              <button class="btn btn-success rounded-7">Додати до кошику</button>
+                                          </a>
+                                      {% elif product.status_product == '_pre_order' %}
+                                          <a href="{{ product.get_absolute_url }}">
+                                              <button class="btn btn-success rounded-7">Попереднє замовлення</button>
+                                          </a>
+                                      {% endif %}
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-button-slick-next"></div>
+                <div class="swiper-button-slick-prev"></div>
+            </div>
+            <!-- scroll-container -->
+            <div class="main-text-block">
+                <div class="main-text">
+                    <div>
+                        <h1>Розплідник декоративних рослин Par.ost.ok</h1>
+                        <div class="container-text">
+                            <p>Щорічно розширюємо і поповнюємо асортимент. Для цього ми співпрацюємо з провідними зарубіжними виробниками рослин. Ретельно вибираємо їх і відсіюємо недобросовісних постачальників. Всі отримані рослини перебираємо і сортуємо. Рослини, розміри і якість яких викликають сумніви, висаджуються на дорощування і в рік придбання в продаж не виставляються.</p>
+                            <p>Ми створюємо всі необхідні умови для стабільного зростання і розвитку багаторічних рослин, чагарників, витких рослин для того щоб вони стали кращою прикрасою Вашого саду</p>
+                            <p>Наша нескінченна захоплення садовими багаторічними рослинами переросло в розплідник, в якому вирощується понад 250 сортів хост одна з найбільших колекцій хост на Україні, більше 200 сортів лілійників, а так іриси, піони і безліч інших рослин. Тому ми пропонуємо і свій посадковий матеріал в широкому асортименті з високою якістю.</p>
+                            <p>Все, що ми робимо, робимо щиро і з любов'ю до своїх клієнтів. Ми невтомно працюємо над тим, щоб зробити світ навколо Вас яскравіше і красивіше.</p>
+                            <p>Ми будемо раді бачити Вас в числі наших клієнтів!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

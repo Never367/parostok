@@ -1,0 +1,15 @@
+<div class="col-lg-2">
+    {% for account_func in user_account %}
+    <div class="flex-column nav-pills text-center">
+        {% if user_account|get_item:account_func == request.path %}
+            <span class="nav-link active">
+                {{ account_func }}
+            </span>
+        {% else %}
+            <a href="{{ user_account|get_item:account_func }}" class="nav-link">
+                {{ account_func }}
+            </a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>

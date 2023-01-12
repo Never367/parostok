@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Список бажань{% endblock %}
+
+{% block content %}
+    <div class="container mt-10 mb-3 flex-grow-1">
+        <div class="row">
+            {% include 'account/user_account.html' %}
+            {% if user_wish_list %}
+                {% include 'products.html' with page_obj=user_wish_list %}
+            {% else %}
+                <div class="col-lg-10">
+                    <h1>Список бажань</h1>
+                    <div class="fs-3">Ваш список бажань пустий</div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

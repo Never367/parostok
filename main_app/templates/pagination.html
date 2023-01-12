@@ -1,0 +1,84 @@
+<div class="d-flex justify-content-center">
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" title="До попередньої сторінки"
+                       href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                        <i class="fas fa-chevron-circle-left"></i>
+                    </a>
+                </li>
+                {% if page_obj.number|add:'-3' > 1 %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page=1">
+                            1
+                        </a>
+                    </li>
+                {% endif %}
+                {% if page_obj.number|add:'-3' >= 3 %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number|add:'-3' }}">
+                            ...
+                        </a>
+                    </li>
+                {% endif %}
+            {% elif paginator.page_range|length > 1 %}
+                <li class="page-item disabled">
+                    <a class="page-link">
+                        <i class="fas fa-chevron-circle-left"></i>
+                    </a>
+                </li>
+            {% endif %}
+            {% if paginator.page_range|length > 1 %}
+                {% for current_page in paginator.page_range %}
+                    {% if page_obj.number == current_page %}
+                        <li class="page-item active">
+                            <a class="page-link">
+                                {{ current_page }}
+                            </a>
+                        </li>
+                    {% elif current_page > page_obj.number|add:'-4' and current_page < page_obj.number|add:'4' %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ current_page }}">
+                                {{ current_page }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if page_obj.has_next %}
+                {% if page_obj.number|add:'4' < page_obj.paginator.num_pages %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number|add:'3' }}">
+                            ...
+                        </a>
+                    </li>
+                {% endif %}
+                {% if page_obj.number|add:'3' < page_obj.paginator.num_pages %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.paginator.num_pages }}">
+                            {{ page_obj.paginator.num_pages }}
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="page-item">
+                    <a class="page-link" title="До наступної сторінки"
+                       href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}">
+                        <i class="fas fa-chevron-circle-right"></i>
+                    </a>
+                </li>
+            {% elif paginator.page_range|length > 1 %}
+                <li class="page-item disabled">
+                    <a class="page-link">
+                        <i class="fas fa-chevron-circle-right"></i>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>

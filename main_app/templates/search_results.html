@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Результати пошуку {{ q }}{% endblock %}
+
+{% block content %}
+
+<div class="container mt-10">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'main' %}">Головна</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Результати пошуку "{{ q }}"</li>
+      </ol>
+    </nav>
+</div>
+
+<div class="container mb-3 flex-grow-1">
+    <div class="row">
+        <div class="col-lg-2">
+        {% for subcategory_nav in categories_dict %}
+            <div class="flex-column nav-pills text-center">
+                 <a class="nav-link"
+                   href="{{ subcategory_nav.get_absolute_url }}">{{ subcategory_nav }}
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+        {% if page_obj %}
+            {% include 'products.html' %}
+        {% else %}
+            <div class="col-lg-10 text-center">
+                <h5>Нажаль нічого не знайдено по Вашому запиту "{{ q }}"</h5>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

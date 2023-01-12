@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Кошик{% endblock %}
+
+{% block content %}
+    <!-- Dynamic cart -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <div class="container mt-10 mb-3 flex-grow-1">
+      <div class="row justify-content-center">
+        <h3 class="text-center cart-empty">Нажаль Ваш кошик порожній. Зробіть будь-ласка замовлення</h3>
+      {% if cart|length %}
+        <div class="col-xl-7 col-lg-8 col-md-7">
+          <div class="border p-3 totals">
+            <h2 class="h6 text-uppercase mb-0">Кошик
+                <strong>
+                    (<span class="cart-total-length">{{ cart|length }}</span>):
+                    <span class="cart-total"> {{ cart.get_total_price }} грн</span>
+                </strong>
+            </h2>
+          </div>
+        {% for item in cart %}
+            {% with product=item.product %}
+              <div class="border p-3 mt-3 clearfix item">
+                <div class="row d-flex align-items-center justify-content-center">
+                    <div class="col-6 col-lg-2">
+                      <a href="{{ product.get_absolute_url }}">
+                          <img class="img-fluid h-auto" src="/media/{{ product.images.first }}" alt="{{ product }}">
+                      </a>
+                    </div>
+                    <div class="col-12 col-lg-4 text-center mt-2 mt-lg-0">
+                      <h3 class="h6 mb-0">{{ product }}<br>
+                        <small>{{ item.product_age.get_product_age_display }}
+                            {{ item.product_container.get_product_container_display }}</small>
+                          <br>
+                        <small>{{ item.price }} грн</small>
+                      </h3>
+                    </div>
+                    <div class="product-price d-none">{{ item.price }}</div>
+                    <div class="pass-quantity col-4 col-lg-2 col-md-4 col-sm-3">
+                      <label for="pass-quantity" class="pass-quantity">Кількість</label>
+                      <input id="pass-quantity" class="form-control w-75" type="number" value="{{ item.quantity }}"
+                             min="1" data-product_id="{{ product.id }}"
+                             data-product_age="{{ item.product_age.product_age }}"
+                             data-product_container="{{ item.product_container.product_container }}"
+                      >
+                    </div>
+                    <div class="col-4 col-lg-2 col-md-2 col-sm-2 product-line-price text-center">
+                      <span class="product-line-price">{{ item.total_price }} грн</span>
+                    </div>
+                    <div class="remove-item col-4 col-lg-2 text-center">
+                      <button class="remove-product btn-light"
+                              id="search_icon"
+                              data-product_id="{{ product.id }}"
+                              data-product_age="{{ item.product_age.product_age }}"
+                              data-product_container="{{ item.product_container.product_container }}">
+                        <i class="far fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+              </div>
+            {% endwith %}
+        {% endfor %}
+        </div>
+
+        <div class="col-xl-3 col-lg-4 col-md-5 totals">
+          <div class="border px-3">
+            <div class="border-bottom">
+              <p class="text-uppercase mb-0 py-3"><strong>Підсумок замовлення</strong></p>
+            </div>
+            <div class="totals-item totals-item-total d-flex align-items-center
+            justify-content-between pt-3">
+              <p class="text-uppercase"><strong>Всього</strong></p>
+              <p class="totals-value font-weight-bold cart-total">{{ cart.get_total_price }} грн</p>
+            </div>
+          </div>
+          <a href="{% url 'order_create' %}"
+             class="mt-3 btn btn-success w-100 d-flex justify-content-center btn-lg checkout
+             {% if cart.get_total_price < 150 %} disabled {% endif %}">
+              Оформити замовлення
+          </a>
+          {% if cart.get_total_price < 150 %}
+              <div class="mt-3 alert-danger text-center">
+                    Зверніть увагу!
+                    <br>
+                    Мінімальна сума для оформлення замовлення 150 грн
+              </div>
+          {% endif %}
+        </div>
+      {% else %}
+          <h3 class="text-center">Нажаль Ваш кошик порожній. Зробіть будь-ласка замовлення</h3>
+      {% endif %}
+      </div>
+    </div><!-- container -->
+
+    <script src="{% static 'js/dynamically_change_cart.js' %}"></script>
+{% endblock %}

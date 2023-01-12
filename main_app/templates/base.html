@@ -1,0 +1,253 @@
+{% load custom_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>{% block title %}Par.ost.ok{% endblock %}</title>
+        <!-- MDB icon -->
+        <link rel="icon" href="#!" type="image/x-icon">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css">
+        <!-- Google Fonts Roboto -->
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+        />
+        <link
+          rel="stylesheet"
+          href="{% static 'css/fonts/red-hat-font.css' %}"
+        />
+        <!-- MDB -->
+        <link href="{% static 'css/mdb-ui-kit_3.10.1_mdb.min-new.css' %}"
+          rel="stylesheet"/>
+        <!-- Swiper -->
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/swiper/swiper-bundle.min.css"
+        />
+
+    </head>
+
+    <body>
+      <!-- Navigation -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div class="container">
+
+        <!-- Toggle button -->
+        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+          data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <a class="navbar-brand" href="{% url 'main' %}">
+{#            <strong>Par.ost.ok</strong>#}
+            <img src="../../../media/brand.png" alt="par-ost-ok.png">
+        </a>
+
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Left links -->
+          <ul class="navbar-nav ms-lg-5 align-items-center">
+            <li class="nav-item dropdown">
+              <span class="nav-link dropdown-toggle active d-flex align-items-center"
+                 data-mdb-toggle="dropdown" aria-expanded="false"><i class="fas fa-bars pe-2"></i>Каталог</span>
+                <ul class="dropdown-menu ms-xs-n8">
+                {% for category in categories_dict %}
+                  <li class="dropdown">
+                    <span class="dropdown-item">{{ category }}</span>
+                    <ul class="dropdown-menu dropdown-submenu">
+                    {% for subcategory in categories_dict|get_item:category %}
+                      <li class="dropdown">
+                        <a class="dropdown-item" href="{{ subcategory.get_absolute_url }}">
+                          {{ subcategory }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                    </ul>
+                  </li>
+                {% endfor %}
+                </ul>
+            </li>
+          </ul>
+          <!-- Left links -->
+
+        <!-- Search -->
+          <form class="d-flex form-search justify-content-center w-100"
+                action="{% url 'search_results' %}" method="get">
+            <div class="input-group w-75">
+              <input name="q" type="search" class="form-control" placeholder="Пошук" aria-label="Search"/>
+            </div>
+            <button class="ps-3" id="search_icon">
+                <i class="fas fa-search"></i>
+            </button>
+          </form>
+        <!-- Search -->
+
+        <!--Right links -->
+          <ul class="navbar-nav align-items-center">
+            <li class="nav-item me-lg-3">
+              <a class="nav-link d-flex align-items-center" href="{% url 'cart_detail' %}">
+                  <i class="fas fa-shopping-cart pe-2"></i>Кошик
+                  {% if cart|length %}
+                    <span class="badge rounded-pill badge-notification bg-danger cart-total-length">{{ cart|length }}</span>
+                  {% endif %}
+              </a>
+            </li>
+            <li class="nav-item">
+              <div class="dropdown">
+                {% if request.user.is_authenticated %}
+                <span class="nav-link dropdown-toggle" type="button" data-mdb-toggle="dropdown">
+                  <i class="fas fa-user-alt pe-2"></i>{{ user }}
+                </span>
+                <div class="dropdown-menu ms-n4 ms-lg-n3 w-250px">
+                    <div class="px-4 py-3">
+                        <a href="{% url 'edit' %}">
+                            <button class="btn btn-primary btn-block mt-1">Особисті дані</button>
+                        </a>
+                        <a href="{% url 'orders' %}">
+                            <button class="btn btn-primary btn-block mt-1">Замовлення</button>
+                        </a>
+                        <a href="{% url 'wish_list' %}">
+                            <button class="btn btn-primary btn-block mt-1">Список бажань</button>
+                        </a>
+                        <a href="{% url 'password_change' %}">
+                            <button class="btn btn-primary btn-block mt-1">Змінити пароль</button>
+                        </a>
+                        <a href="{% url 'logout' %}?next={{ request.path }}{% if q %}?q={{ q }}{% endif %}">
+                            <button class="btn btn-primary btn-block mt-1">Вийти</button>
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <span class="nav-link dropdown-toggle" data-mdb-toggle="dropdown">
+                  <i class="fas fa-user-alt pe-2"></i>Вхід
+                </span>
+                <div id="div_login" class="dropdown-menu ms-n12 ms-lg-n15 w-300px">
+                  <form action="{% url 'login' %}?next={{ request.path }}{% if q %}?q={{ q }}{% endif %}"
+                        method="POST" class="px-4 py-3">
+                    {% csrf_token %}
+                    {% for field in login_form %}
+                        <div class="form-outline mb-4">
+                            {{ field }}
+                            <label class="form-label">{{ field.label }}</label>
+                        </div>
+                    {% endfor %}
+                    <!-- 2 column grid layout for inline styling -->
+                    <div class="row mb-4">
+                      <div class="col d-flex justify-content-center">
+                        <!-- Checkbox -->
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="Login3" checked/>
+                          <label class="form-check-label d-flex" for="Login3">Запам'ятати мене</label>
+                        </div>
+                      </div>
+
+                      <div class="col">
+                        <!-- Simple link -->
+                        <a href="{% url 'password_reset' %}">Забули пароль?</a>
+                      </div>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary btn-block">Увійти</button>
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-block">Зареєструватись</a>
+                  </form>
+                </div>
+                {% endif %}
+              </div>
+            </li>
+          </ul>
+        <!--Right links -->
+        </div>
+        <!-- Collapsible wrapper -->
+      </div>
+      <!-- Container wrapper -->
+    </nav>
+    <!-- Navbar -->
+
+    {% if form.errors %}
+        <div class="container mt-10">
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger text-center">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="text-center text-white flex-shrink-0">
+      <!-- Grid container -->
+      <div class="container p-3">
+        <!-- Section: Social media -->
+        <section>
+          <!-- Google -->
+          <a
+            class="btn btn-link btn-floating btn-lg text-dark m-1"
+            href="#!"
+            role="button"
+            data-mdb-ripple-color="dark"
+            ><i class="fab fa-google"></i
+          ></a>
+
+          <!-- Facebook -->
+          <a
+            class="btn btn-link btn-floating btn-lg text-dark m-1"
+            href="#!"
+            role="button"
+            data-mdb-ripple-color="dark"
+            ><i class="fab fa-facebook-f"></i
+          ></a>
+
+          <!-- Instagram -->
+          <a
+            class="btn btn-link btn-floating btn-lg text-dark m-1"
+            href="#!"
+            role="button"
+            data-mdb-ripple-color="dark"
+            ><i class="fab fa-instagram"></i
+          ></a>
+
+          <!-- Viber -->
+          <a
+            class="btn btn-link btn-floating btn-lg text-dark m-1"
+            href="#!"
+            role="button"
+            data-mdb-ripple-color="dark"
+            ><i class="fab fa-viber"></i
+          ></a>
+
+          <!-- Telegram -->
+          <a
+            class="btn btn-link btn-floating btn-lg text-dark m-1"
+            href="#!"
+            role="button"
+            data-mdb-ripple-color="dark"
+            ><i class="fab fa-telegram-plane"></i
+          ></a>
+        </section>
+        <!-- Section: Social media -->
+      </div>
+      <!-- Grid container -->
+    </footer>
+
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.js"></script>
+    <!-- Swiper -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <!-- Custom scripts -->
+    <script src="/static/smart-selects/admin/js/chainedfk.js"></script>
+    <script src="/static/smart-selects/admin/js/bindfields.js"></script>
+    <script src="/static/js/account_login.js"></script>
+    <script src="/static/js/products_disable_button.js"></script>
+    <script src="/static/js/user_order.js"></script>
+    <script type="module" src="/static/js/swiper.js"></script>
+  </body>
+</html>

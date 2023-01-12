@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Замовлення{% endblock %}
+
+{% block content %}
+    <div class="container mt-10 flex-grow-1">
+        <div class="row">
+            {% include 'account/user_account.html' %}
+            <div class="col-lg-10">
+                <h1>Замовлення</h1>
+                {% if orders %}
+                    {% for order in orders %}
+                        <div class="border p-3 mt-3 clearfix user_order">
+                            <div class="row d-flex align-items-center order_row">
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-6">
+                                            <div class="text-black-50 small">{{ order }}</div>
+                                            <div>{{ order.get_status_order_display }}</div>
+                                        </div>
+                                        <div class="col-6 d-lg-none">
+                                            <div class="dropdown-toggle text-end"></div>
+                                        </div>
+                                        <div class="col-lg-6 mt-3 mt-lg-0 text-start text-lg-center order_sum">
+                                            <div class="text-black-50 small">Сума замовлення</div>
+                                            <div>{{ order.get_total_cost }} грн</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 mt-3 mt-lg-0">
+                                    <div class="row align-items-center justify-content-start justify-content-lg-end">
+                                        {% for item in order.items.all %}
+                                        <div class="col-2 col-lg-2 order_picture">
+                                            <a title="{{ item.product }}" href="{{ item.product.get_absolute_url }}">
+                                                <img class="img-fluid h-auto" src="/media/{{ item.product.images.first }}"
+                                                     alt="{{ item.product }}">
+                                            </a>
+                                        </div>
+                                        {% endfor %}
+                                        <div class="d-none d-lg-block dropdown-toggle col-1 col-lg-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3 d-flex align-items-center d-none">
+                                <p class="text-black-50 small">Інформація про замовлення</p>
+                                {% if order.consignment_note %}
+                                    <div>ТТН {{ order.consignment_note }}</div>
+                                {% endif %}
+                                <div class="col-lg-4">
+                                    <div>{{ order.get_delivery_type_display }}</div>
+                                    <div>{{ order.address }}</div>
+                                    <div>{{ order.last_name }} {{ order.first_name }}</div>
+                                    <div>{{ order.phone_number }}</div>
+                                    <div>{{ order.email }}</div>
+                                </div>
+                                <div class="col-lg-8">
+                                    {% for item in order.items.all %}
+                                        <div class="row mt-3 mt-lg-2">
+                                            <div class="col-2 col-lg-2">
+                                                <a title="{{ item.product }}" href="{{ item.product.get_absolute_url }}">
+                                                    <img class="img-fluid h-auto"
+                                                         src="/media/{{ item.product.images.first }}"
+                                                         alt="{{ item.product }}">
+                                                </a>
+                                            </div>
+                                            <div class="col-10 col-lg-4">
+                                                {{ item.product }}
+                                            </div>
+                                            <div class="mt-2 d-lg-none"></div>
+                                            <div class="col-4 col-lg-2 text-center">
+                                                <div class="text-black-50 small">Ціна</div>
+                                                <div>{{ item.price }} грн</div>
+                                            </div>
+                                            <div class="col-4 col-lg-2 text-center">
+                                                <div class="text-black-50 small">Кількість</div>
+                                                <div>{{ item.quantity }}</div>
+                                            </div>
+                                            <div class="col-4 col-lg-2 text-center">
+                                                <div class="text-black-50 small">Сума</div>
+                                                <div>{{ item.get_cost }} грн</div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="row mt-3">
+                                        <div class="col-4 col-lg-4 text-black-50 small">Оплата</div>
+                                        <div class="col-8 col-lg-8 text-end">{{ order.get_payment_type_display }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4 text-black-50 small col-lg-4">Доставка</div>
+                                        <div class="col-8 col-lg-8 text-end">Доставка по Україні за тарифами перевізника</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4 text-black-50 small col-lg-4">Разом</div>
+                                        <div class="col-8 fs-5 col-lg-8 text-end">{{ order.get_total_cost }} грн</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="mt-3">
+                        {% include 'pagination.html' with page_obj=orders %}
+                    </div>
+                {% else %}
+                    <div class="fs-3">У вас ще немає замовлень</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
